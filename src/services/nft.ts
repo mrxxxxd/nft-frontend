@@ -14,9 +14,12 @@ const nftService = {
         return response.data;
     },
 
-    createNFT: async (data: any) => {
+    createNFT: async (data: FormData) => {
         const headers = authService.getAuthHeader();
-        const response = await axios.post(`${API_URL}/nfts`, data, { headers });
+        // Axios automatically sets Content-Type to multipart/form-data when data is FormData
+        const response = await axios.post(`${API_URL}/nfts`, data, {
+            headers: { ...headers } // Don't set Content-Type manually
+        });
         return response.data;
     },
 

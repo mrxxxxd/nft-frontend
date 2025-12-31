@@ -7,33 +7,34 @@ import nftService from '@/services/nft';
 
 export default function CreateNFTPage() {
     const router = useRouter();
-    const [formData, setFormData] = useState({
-        name: '',
-        price: '',
-        image_url: '',
-        description: '',
-        category: ''
-    });
+    const [name, setName] = useState('');
+    const [price, setPrice] = useState('');
+    const [description, setDescription] = useState('');
+    const [category, setCategory] = useState('');
+    const [image, setImage] = useState<File | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
-    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         setError('');
 
+        if (!image) {
+            setError('Please select an image');
+            setLoading(false);
+            return;
+        }
+
         try {
-            await nftService.createNFT({
-                ...formData,
-                price: parseFloat(formData.price) // Ensure price is a number
-            });
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('price', price);
+            formData.append('description', description);
+            formData.append('category', category);
+            formData.append('image', image); // Append file
+
+            await nftService.createNFT(formData);
             router.push('/admin');
         } catch (err: any) {
             console.error(err);
@@ -60,10 +61,9 @@ export default function CreateNFTPage() {
                             <label className="block text-sm font-medium mb-1">Name</label>
                             <input
                                 type="text"
-                                name="name"
                                 required
-                                value={formData.name}
-                                onChange={handleChange}
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
                                 className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:outline-none focus:border-indigo-500"
                             />
                         </div>
@@ -73,22 +73,20 @@ export default function CreateNFTPage() {
                             <input
                                 type="number"
                                 step="0.0001"
-                                name="price"
                                 required
-                                value={formData.price}
-                                onChange={handleChange}
+                                value={price}
+                                onChange={(e) => setPrice(e.target.value)}
                                 className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:outline-none focus:border-indigo-500"
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium mb-1">Image URL</label>
+                            <label className="block text-sm font-medium mb-1">Image File</label>
                             <input
-                                type="text"
-                                name="image_url"
+                                type="file"
+                                accept="image/*"
                                 required
-                                value={formData.image_url}
-                                onChange={handleChange}
+                                onChange={(e) => setImage(e.target.files ? e.target.files[0] : null)}
                                 className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:outline-none focus:border-indigo-500"
                             />
                         </div>
@@ -97,9 +95,8 @@ export default function CreateNFTPage() {
                             <label className="block text-sm font-medium mb-1">Category</label>
                             <input
                                 type="text"
-                                name="category"
-                                value={formData.category}
-                                onChange={handleChange}
+                                value={category}
+                                onChange={(e) => setCategory(e.target.value)}
                                 className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:outline-none focus:border-indigo-500"
                             />
                         </div>
@@ -107,10 +104,9 @@ export default function CreateNFTPage() {
                         <div>
                             <label className="block text-sm font-medium mb-1">Description</label>
                             <textarea
-                                name="description"
                                 rows={4}
-                                value={formData.description}
-                                onChange={handleChange}
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
                                 className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white focus:outline-none focus:border-indigo-500"
                             />
                         </div>
@@ -128,7 +124,7 @@ export default function CreateNFTPage() {
                                 disabled={loading}
                                 className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2 px-6 rounded disabled:opacity-50"
                             >
-                                {loading ? 'Creating...' : 'Create NFT'}
+                                {loading ? 'Uploading...' : 'Create NFT'}
                             </button>
                         </div>
                     </form>
