@@ -116,7 +116,13 @@ export default function Home() {
       <footer className="border-t border-gray-800 mt-12">
         <div className="max-w-7xl mx-auto px-4 py-8 text-center text-gray-400">
           <p>© 2024 NFT Marketplace. All digital assets are verified on the blockchain.</p>
-          <p className="mt-2 text-sm">Backend API Status: <span className="text-green-400">Connected</span></p>
+          <div className="mt-4 flex justify-center space-x-4 text-sm">
+            <p>Backend API Status: <span className="text-green-400">Connected</span></p>
+            <span className="text-gray-600">|</span>
+            <Link href="/login" className="hover:text-cyan-400 transition-colors">
+              Admin Login
+            </Link>
+          </div>
         </div>
       </footer>
     </div>
