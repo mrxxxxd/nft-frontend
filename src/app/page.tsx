@@ -20,7 +20,7 @@ export default function Home() {
 
   const fetchNFTs = async () => {
     try {
-      const data = await apiClient.get('/nfts');
+      const data = await apiClient.get('/api/nfts');
       setNfts(data);
     } catch (error) {
       console.error('Failed to fetch NFTs:', error);
