@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 const authService = {
     register: async (username: string, email: string, password: string) => {
-        const response = await axios.post(`${API_URL}/auth/register`, {
+        const response = await axios.post(`${API_BASE_URL}/api/auth/register`, {
             username,
             email,
             password,
@@ -16,7 +16,7 @@ const authService = {
     },
 
     login: async (email: string, password: string) => {
-        const response = await axios.post(`${API_URL}/auth/login`, {
+        const response = await axios.post(`${API_BASE_URL}/api/auth/login`, {
             email,
             password,
         });

@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 
 import { useEffect, useState } from 'react';
 import { apiClient } from '@/lib/api';
@@ -38,12 +39,18 @@ export default function Home() {
             NFT Marketplace
           </h1>
           <div className="space-x-4">
-            <button className="px-4 py-2 bg-gray-800 rounded-lg hover:bg-gray-700">
-              Connect Wallet
-            </button>
-            <button className="px-4 py-2 bg-gradient-to-r from-purple-600 to-cyan-500 rounded-lg hover:opacity-90">
-              Create NFT
-            </button>
+            <Link
+              href="/login"
+              className="px-4 py-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors"
+            >
+              Login
+            </Link>
+            <Link
+              href="/register"
+              className="px-4 py-2 bg-gradient-to-r from-purple-600 to-cyan-500 rounded-lg hover:opacity-90 transition-opacity"
+            >
+              Register
+            </Link>
           </div>
         </div>
       </header>
@@ -65,11 +72,11 @@ export default function Home() {
             {nfts.map((nft) => (
               <div key={nft.id} className="bg-gray-800 rounded-xl overflow-hidden hover:scale-[1.02] transition-transform duration-300">
                 <div className="h-48 overflow-hidden">
-                  <img 
-  src={`https://picsum.photos/seed/nft${nft.id}/400/400`}
-  alt={nft.name}
-  className="w-full h-full object-cover"
-/>
+                  <img
+                    src={`https://picsum.photos/seed/nft${nft.id}/400/400`}
+                    alt={nft.name}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div className="p-4">
                   <h3 className="font-bold text-lg truncate">{nft.name}</h3>
